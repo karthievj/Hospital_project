@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<!-- <link rel="stylesheet" href="{% static 'css/create.css' %}"> -->
+<div class="container">
+    <div class="form-container">
+        <h2 style="text-align:center;">Doctor's Registration</h2>
+        <form method="POST" action="{% url 'register_doctor' %}">
+            {% csrf_token %}
+            <label>First Name</label><br>
+            <input name="fname" type="text" placeholder="FIRST NAME" required class="form-control"><br>
+
+            <label>Last Name</label><br>
+            <input name="lname" type="text" placeholder="LAST NAME" required class="form-control"><br>
+
+            <label>Username</label><br>
+            <input name="uname" placeholder="USERNAME" type="text" required class="form-control"><br>
+
+            <label>Specilization</label><br>
+            <input name="specialization" placeholder="SPECIALIZATION" type="text" required class="form-control"><br>
+
+            <label>Enter your password</label><br>
+            <input name="passwd1" placeholder="Enter your passsword" type="password" required class="form-control"><br>
+
+            <label>Retype the password</label><br>
+            <input name="passwd2" placeholder="Confirm your passoword" type="password" required class="form-control"><br>
+
+            <div class="button-container">
+                <button type="submit" class="btn btn-success">Register</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

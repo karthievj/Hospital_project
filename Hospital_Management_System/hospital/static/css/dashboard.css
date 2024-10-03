@@ -1,0 +1,120 @@
+.dashboard-container {
+    display: flex;
+    flex-wrap: wrap; /* Allows sidebar and main content to wrap */
+}
+
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    background-color: #333;
+    color: white;
+    padding-top: 20px;
+    position: fixed;
+}
+
+.sidebar-header {
+    text-align: center;
+    padding: 10px;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.sidebar-menu {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar-menu li {
+    padding: 15px;
+    text-align: left;
+}
+
+.sidebar-menu li a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    display: block;
+}
+
+.sidebar-menu li a i {
+    margin-right: 10px;
+}
+
+.sidebar-menu li:hover {
+    background-color: #444;
+}
+
+.sidebar-menu li a:hover {
+    color: #00bcd4;
+}
+
+/* Main content */
+.main-content {
+    margin-left: 250px;
+    padding: 20px;
+    width: calc(100% - 250px);
+    background-color: #f4f4f4;
+}
+
+header {
+    margin-bottom: 30px;
+}
+
+header h1 {
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+header p {
+    font-size: 16px;
+    color: #555;
+}
+
+.dashboard-section {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap; /* Allows cards to wrap for smaller screens */
+}
+
+.card {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 30%;
+    min-width: 200px;
+}
+
+.card h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.card p {
+    font-size: 16px;
+    color: #555;
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 768px) {
+    .sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+    }
+
+    .main-content {
+        margin-left: 0;
+        width: 100%;
+        padding: 10px;
+    }
+
+    .dashboard-section {
+        flex-direction: column;
+    }
+
+    .card {
+        width: 100%;
+    }
+}

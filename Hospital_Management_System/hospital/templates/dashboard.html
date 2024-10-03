@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+<div class="dashboard-container">
+    <!-- Sidebar -->
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <h2>Admin Dashboard</h2>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="#"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+            <li><a href="#"><i class="fas fa-user"></i> Users</a></li>
+            <li><a href="#"><i class="fas fa-file-alt"></i> Reports</a></li>
+            <li><a href="#"><i class="fas fa-cogs"></i> Settings</a></li>
+            <li><a href="#"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <header>
+            <h1>Welcome to the Admin Dashboard</h1>
+            <p>Manage your users, reports, and settings from here.</p>
+        </header>
+
+        <section class="dashboard-section">
+            <div class="card">
+                <h3>Total Users</h3>
+                <p>105</p>
+            </div>
+            <div class="card">
+                <h3>Active Reports</h3>
+                <p>45</p>
+            </div>
+            <div class="card">
+                <h3>System Settings</h3>
+                <p>Update system configurations</p>
+            </div>
+        </section>
+    </div>
+</div>
+
+{% endblock %}
