@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<!-- <link rel="stylesheet" href="{% static 'css/dashboard.css' %}"> -->
+
+<div class="container">
+    <div class="form-container">
+        <h2>Doctor Login</h2>
+        <form method="POST" action="{% url 'doctor_login' %}">
+            {% csrf_token %}
+            <label>Username</label><br>
+            <input name="uname" type="text" placeholder="Type your username here" required class="form-control"><br>
+
+            <label>Password</label><br>
+            <input name="passwd" type="password" placeholder="Enter your password here" required
+                class="form-control"><br>
+
+            <div class="button-container">
+                <button type="submit" class="btn btn-success">Login</button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+
+{% endblock %}

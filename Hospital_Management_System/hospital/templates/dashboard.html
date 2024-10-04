@@ -20,23 +20,64 @@
     <!-- Main Content -->
     <div class="main-content">
         <header>
-            <h1>Welcome to the Admin Dashboard</h1>
-            <p>Manage your users, reports, and settings from here.</p>
+            <h1>Welcome Admin </h1> 
+            <p>Manage your Doctor, Patients here.</p>
         </header>
 
         <section class="dashboard-section">
-            <div class="card">
-                <h3>Total Users</h3>
-                <p>105</p>
+            <div class="card1">
+                <div class="card-header">
+                    <h1>Unapproved Doctors Data </h1>
+                </div>
+                <div class="card-body">
+                    {% if unapproved_doctors %}
+                    <h1>Unapproved doctors count - {{unapproved_doctors_count}}</h1>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="thead-dark">
+                                <th>Doctor name</th>
+                                <th>Doctor ID </th>
+                                <th>Specialization</th>
+                                <th>Status </th>
+                                <th>Approve</th>
+                                <th>Reject</th>
+                            </thead>
+                            <tbody>
+                                {% for doctor in unapproved_doctors %}
+                                <tr>
+                                    <td>{{doctor.first_name}} {{doctor.last_name}}</td>
+                                    <td>{{doctor.doctor_id}}</td>
+                                    <td>{{doctor.specialization}}</td>
+                                    <td>Pending</td>
+                                    <td><a href="{% url 'doctor_approve' doctor.doctor_id %}"
+                                            class="btn btn-success">Approve</a>
+                                    </td>
+                                    <td><a href="{% url 'doctor_reject' doctor.doctor_id %}"
+                                            class="btn btn-danger">Reject</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            {% endfor %}
+                        </table>
+                    </div>
+                    {%else%}
+                    <div>
+                        <h1>No doctors need to approval</h1>
+                    </div>
+                    {%endif%}
+                </div>
             </div>
+
             <div class="card">
                 <h3>Active Reports</h3>
                 <p>45</p>
             </div>
+
             <div class="card">
                 <h3>System Settings</h3>
                 <p>Update system configurations</p>
             </div>
+
         </section>
     </div>
 </div>

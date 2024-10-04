@@ -19,7 +19,7 @@ class Doctor(models.Model):
         Eg - First name -  Suresh
             Last name - Kannan
 
-            Doctor id - DOSK1234
+            Doctor id - DOSK8754
         """
 
         if not self.doctor_id:
@@ -51,7 +51,7 @@ class Patient(models.Model):
         Eg - First name -  Suresh
             Last name - Kannan
 
-            Patient id - PTSK1234
+            Patient id - PATSK1234
         """
 
         if not self.patient_id:
