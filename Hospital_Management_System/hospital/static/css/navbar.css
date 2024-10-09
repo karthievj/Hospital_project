@@ -1,0 +1,12 @@
+/* CSS for navbar */
+.navbar {
+    position: fixed; /* Fixes the navbar at the top */
+    top: 0; /* Align to the top */
+    left: 0; /* Align to the left */
+    right: 0; /* Align to the right */
+    z-index: 1000; /* Ensures navbar is above other content */
+}
+
+.custom-link {
+    color: black;
+}

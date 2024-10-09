@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, HttpResponse
 from django.contrib.auth.models import User
 from django.contrib import messages
-from .models import Doctor, Patient
+from .models import Doctor, Patient , RejectedDoctors
 from django.contrib.auth import authenticate,login,logout
 
 
@@ -30,13 +30,13 @@ def register_doctor(request):
 
         # password validation
         if passwd1 != passwd2:
-            messages.error(request,"Passwords not matched...Plzzz re enter your passeord")
+            messages.warning(request,"Passwords not matched...Plzzz re enter your passeord")
             return redirect("/register_doctor")
         
         # username unique validation
         doctor = User.objects.filter(username=uname).exists()
         if doctor:
-            messages.error(request,"Username you typed is already exists..Plzzz choose another username or contact admin panel")
+            messages.warning(request,"Username you typed is already exists..Plzzz choose another username or contact admin panel")
             return redirect("/register_doctor")
         
         # Doctor data Saving
@@ -60,20 +60,20 @@ def doctor_login(request):
         uname = request.POST['uname']
         passwd = request.POST['passwd']
         user = authenticate(username=uname,password=passwd)
-        print(user,"user")
-        # user is present or not
-        if user is not None:
-            # Doctor approval validation
-            if hasattr(user,'doctor') and not user.doctor.approval:
-                messages.warning(request,"Your doctor registration is waiting for approval")
-            # if not hasattr(user,'doctor'):
-            #     messages.warning(request,"Your doctor profile is rejected by admin...plzz contact administration")
+        reject_obj = RejectedDoctors.objects.filter(username=uname).exists()
+        print(reject_obj)
+        if reject_obj==False:   #Doctor Rejection validation
+            if user is not None: # User validation
+                if hasattr(user,'doctor') and not user.doctor.approval: # Doctor approval validation
+                    messages.warning(request,"Your doctor registration is waiting for approval")
+                else:
+                    login(request,user)
+                    # Doctor dashboard 
+                    return HttpResponse("Hi")
             else:
-                login(request,user)
-                # Doctor dashboard 
-                return HttpResponse("Hi")
+                messages.error(request,"Your application is still in pending state..Plzz contact admin panel")
         else:
-            messages.error(request,"Invalid login credentials...Plzz check password and username")
+            messages.error(request,"Your application is rejected by the admin...")
             return redirect("/doctor_login")
         
     return render(request, "doctor_login.html")
@@ -84,13 +84,41 @@ def doctor_approve(request,id):
     doctor.approval = True # Here only we are approving the doctor
     doctor.user.save() # save for user model
     doctor.save() # save for doctor model
-    messages.success(request, f"Doctor {doctor.first_name} {doctor.last_name} approved successfully")
-    return redirect('/dashboard')
+    unapproved_doctors = Doctor.objects.filter(approval=False).values() #database
+    unapproved_doctors_count = len(unapproved_doctors)
+    msg = {'approve_message':f"Doctor {doctor.first_name} {doctor.last_name} approved successfully"}
+    if unapproved_doctors_count == 0:
+        return render(request,"dashboard.html",context=msg)
+    else:
+        print(unapproved_doctors,"data")
+        data = {'unapproved_doctors':unapproved_doctors,
+                'unapproved_doctors_count':unapproved_doctors_count,
+                'approve_message':f"Doctor {doctor.first_name} {doctor.last_name} approved successfully"}
+        return render(request,"dashboard.html",context=data)
 
 def doctor_reject(request,id):
     doctor = Doctor.objects.get(doctor_id=id)
-    doctor.user.delete() # 
-    doctor.delete()    
+    firt_name = doctor.first_name
+    last_name = doctor.last_name
+    doctor_id = doctor.doctor_id
+    username = doctor.username
+    RejectedDoctors.objects.create(
+        doctor_id = doctor_id,
+        username = username
+    )
+    doctor.user.delete() 
+    doctor.delete()
+    unapproved_doctors = Doctor.objects.filter(approval=False).values() #database
+    unapproved_doctors_count = len(unapproved_doctors)
+    msg = {'delete_message':f"Doctor {firt_name} {last_name} rejected"}
+    if unapproved_doctors_count == 0:
+        return render(request,"dashboard.html",context=msg)
+    else:
+        print(unapproved_doctors,"data")
+        data = {'unapproved_doctors':unapproved_doctors,
+                'unapproved_doctors_count':unapproved_doctors_count,
+                'approve_message':f"Doctor {firt_name} {last_name} rejected"}
+        return render(request,"dashboard.html",context=data)
 
 def register_patient(request):
     if request.method == 'POST':

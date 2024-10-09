@@ -2,6 +2,17 @@
 {% load static %}
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+
+<div class="dashboard-messages">
+    {% if approve_message %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ approve_message }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% endif %}
+</div>
 <div class="dashboard-container">
     <!-- Sidebar -->
     <nav class="sidebar">
@@ -20,7 +31,7 @@
     <!-- Main Content -->
     <div class="main-content">
         <header>
-            <h1>Welcome Admin </h1> 
+            <h1>Welcome Admin </h1>
             <p>Manage your Doctor, Patients here.</p>
         </header>
 
@@ -48,7 +59,9 @@
                                     <td>{{doctor.first_name}} {{doctor.last_name}}</td>
                                     <td>{{doctor.doctor_id}}</td>
                                     <td>{{doctor.specialization}}</td>
-                                    <td>Pending</td>
+                                    <td>
+                                        <span class="badge badge-warning">Pending</span>
+                                    </td>
                                     <td><a href="{% url 'doctor_approve' doctor.doctor_id %}"
                                             class="btn btn-success">Approve</a>
                                     </td>

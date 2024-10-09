@@ -7,5 +7,5 @@
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
+    padding-top: 70px; /* Adjust this value based on your navbar height */
 }
-

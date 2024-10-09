@@ -65,3 +65,12 @@ class Patient(models.Model):
 
     def __str__(self) -> str:
         return f"{self.first_name}_{self.last_name}"
+    
+class RejectedDoctors(models.Model):
+    doctor_id = models.CharField(max_length=10,unique=True,blank=True)
+    username= models.CharField(max_length=20)
+
+    def __str__(self) -> str:
+        return f"{self.doctor_id}"
+
+

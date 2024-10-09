@@ -3,14 +3,20 @@
     flex-wrap: wrap; /* Allows sidebar and main content to wrap */
 }
 
+body {
+    padding-top: 60px; /* Adjust this value based on your navbar height */
+}
+
 /* Sidebar */
 .sidebar {
+    position: fixed;
+    top: 70px; /* This should be the height of the navbar */
     width: 250px;
-    height: 100vh;
+    height: calc(100vh - 70px); /* Adjust for the height of the navbar */
     background-color: #272525;
     color: white;
     padding-top: 20px;
-    position: fixed;
+    overflow-y: auto; /* Add scroll if content exceeds the height */
 }
 
 .sidebar-header {
@@ -115,6 +121,14 @@ header p {
 .card p {
     font-size: 16px;
     color: #555;
+}
+
+.dashboard-messages{
+    position: relative;
+    margin-left: 500px; /* Same as the sidebar width */
+    z-index: 1000; /* Ensures it appears above other elements */
+    padding-top: 5px; /* Optional: Adjust if you want some spacing from the top */
+    max-width: calc(100% - 250px); /* Ensure the messages don't overflow outside of the visible area */
 }
 
 /* Responsive adjustments */
