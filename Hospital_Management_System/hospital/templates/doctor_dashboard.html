@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<!-- <link rel="stylesheet" href="{% static 'css/dashboard.css' %}"> -->
+
+<h1>Welcome {{doctor_obj.first_name}} {{doctor_obj.last_name}}</h1>
+<a href="{% url 'set_availability' doctor_obj.doctor_id  %}">Set Availabilty</a>
+
+{% endblock %}

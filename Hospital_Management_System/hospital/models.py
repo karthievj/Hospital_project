@@ -72,5 +72,44 @@ class RejectedDoctors(models.Model):
 
     def __str__(self) -> str:
         return f"{self.doctor_id}"
+    
+class DoctorAvailability(models.Model):
+    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE, related_name='availabilities')
+    available_date = models.DateField()
+
+    class Meta:
+        unique_together = ('doctor', 'available_date')
+
+    def __str__(self):
+        return f"{self.doctor.first_name} - {self.available_date}"
+    
+class Service(models.Model): # admin
+    name = models.CharField(max_length=100)
+    cost = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        return f"{self.name} - ${self.cost}"
+
+# class Appointment(models.Model):
+#     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
+#     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
+#     appointment_date = models.DateField()
+#     services = models.ManyToManyField(Service)  # Link to the Service model
+#     appt_id = models.CharField(max_length=10,unique=True,blank=True)
+
+#     def save(self,*args,**kwargs):
+#         """Appoitment ID : APPT362523
+#         Eg - Date -  01/10/24
+#             Patient id - APPT011034
+#         """
+#         if not self.appt_id:
+#             appt_date = self.appointment_date.strftime('%d%m') # 0110
+#             random_id = ''.join(random.choices(string.digits,k=2)) 
+#             self.patient_id = f"APPT{appt_date}{random_id}"
+#         super().save(*args,**kwargs)
+
+#     def __str__(self):
+#         return f"Appointment {self.appt_id} with Dr. {self.doctor.first_name} for {self.patient.first_name}"
+
 
 

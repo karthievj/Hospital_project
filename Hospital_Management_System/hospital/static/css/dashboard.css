@@ -125,7 +125,7 @@ header p {
 
 .dashboard-messages{
     position: relative;
-    margin-left: 500px; /* Same as the sidebar width */
+    margin-left: 250px; /* Same as the sidebar width */
     z-index: 1000; /* Ensures it appears above other elements */
     padding-top: 5px; /* Optional: Adjust if you want some spacing from the top */
     max-width: calc(100% - 250px); /* Ensure the messages don't overflow outside of the visible area */

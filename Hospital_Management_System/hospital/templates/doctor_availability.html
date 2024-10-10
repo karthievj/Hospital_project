@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<!-- <link rel="stylesheet" href="{% static 'css/dashboard.css' %}"> -->
+
+<form method="POST">
+    {%csrf_token%}
+    <h3>Select the Availability dates for the next week</h3>
+    {% for date in next_week_dates %}
+    <div>
+        <input type="checkbox" name="availability_dates" value="{{date}}">
+        <label >{{date}}</label>
+    </div>
+    {%endfor%}
+    <button type="submit" class="btn btn-primary">Save Availability</button>
+
+</form>
+
+{% endblock %}
