@@ -3,7 +3,7 @@
 {% block content %}
 <!-- <link rel="stylesheet" href="{% static 'css/dashboard.css' %}"> -->
 
-<form method="POST">
+<!-- <form method="POST">
     {%csrf_token%}
     <h3>Select the Availability dates for the next week</h3>
     {% for date in next_week_dates %}
@@ -14,6 +14,44 @@
     {%endfor%}
     <button type="submit" class="btn btn-primary">Save Availability</button>
 
-</form>
+</form> -->
+
+<!-- Button to Open the Modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#availabilityModal">
+    Set Availability
+</button>
+
+<!-- The Modal -->
+<div class="modal fade" id="availabilityModal" tabindex="-1" role="dialog" aria-labelledby="availabilityModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="availabilityModalLabel">Set Your Availability</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" id="availabilityForm">
+                    {% csrf_token %}
+                    <h6>Select Your Availability for the Next Week</h6>
+                    <ul class="list-group">
+                        {% for date in next_week_dates %}
+                            <li class="list-group-item">
+                                <input type="checkbox" name="availability_dates" value="{{ date|date:'b. d, Y' }}">
+                                {{ date|date:'b. d, Y' }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Update Availability</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 {% endblock %}

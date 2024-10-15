@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="container mt-5">
+    <h2>Book an Appointment</h2>
+
+    <form method="POST" action="{% url 'book_appointment' %}">
+        {% csrf_token %}
+
+          <!-- Doctor Selection Field -->
+          <div class="mb-3">
+            <label for="doctorSelect" class="form-label">Select Doctor: </label>
+            <select class="form-select" id="doctorSelect" name="doctor_id" required onchange="this.form.submit()">
+                <option value="">-- Select Doctor --</option>
+                {% for doctor in approved_doctors %}
+                    <option value="{{ doctor.doctor_id }}" {% if selected_doctor and selected_doctor.doctor_id == doctor.doctor_id %}selected{% endif %}>
+                        {{ doctor.first_name }} {{ doctor.last_name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Display Appointment Date Field only if a doctor is selected -->
+        {% if selected_doctor %}
+        <div class="mb-3">
+            <label for="appointmentDate" class="form-label">Select Appointment Date</label>
+            <select class="form-select" id="appointmentDate" name="appointment_date" required>
+                <option value="">-- Select Appointment Date --</option>
+                {% for date in available_dates %}
+                    <option value="{{ date }}">{{ date }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        {% endif %}
+
+        <!-- Services Field (Optional) -->
+        <div class="mb-3">
+            <label for="services" class="form-label">Select Services</label>
+            {% for service in services %}
+                <div class="form-check">
+                    <input class="form-check-input" 
+                    type="checkbox" 
+                    name="services" 
+                    value="{{ service.id }}" 
+                    id="service{{ service.id }}" 
+                    {% if service.name == "General Check up" %}
+                    checked
+                    {% endif %} 
+                    >
+                    <label class="form-check-label" for="service{{ service.id }}">
+                        {{ service.name }}
+                    </label>
+                </div>
+            {% endfor %}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+{% endblock %}

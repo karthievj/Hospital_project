@@ -1,0 +1,39 @@
+.card {
+    display: flex;
+    flex-direction: column; /* Ensure content stacks vertically */
+    height: 100%; /* Make card fill the height of the column */
+}
+
+.equal-height {
+    height: 100%; /* Ensures all cards take full height of their container */
+}
+
+.row {
+    display: flex; /* Flexbox to align items */
+}
+
+.col-md-4 {
+    display: flex; /* Flexbox for column */
+    flex-direction: column; /* Make sure contents are vertical */
+}
+
+/* Optional: Set a fixed height for all cards */
+.card {
+    min-height: 200px; /* Adjust the height as needed */
+}
+.card2 {
+    background-color: rgb(255, 255, 0);
+
+}
+.card3 {
+    background-color: rgb(15, 168, 152);
+
+}
+.welcome-message {
+    font-size: 2rem; /* Adjust size as needed */
+    color: #333; /* Adjust color as needed */
+    margin-top: 20px; /* Add some margin */
+    font-weight: bold; /* Optional: make it bold */
+}
+
+

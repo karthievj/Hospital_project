@@ -22,6 +22,11 @@ urlpatterns = [
 
     #patient urls
     path('register_patient/',views.register_patient,name="register_patient"),
+    path('patient_login/',views.patient_login,name="patient_login"),
+    path('patient_dashboard/',views.patient_dashboard,name="patient_dashboard"),
+
+    #Book Appointment
+    path('book_appointment/',views.book_appointment,name="book_appointment"),
 
 
 ]

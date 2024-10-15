@@ -1,9 +1,88 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<!-- <link rel="stylesheet" href="{% static 'css/dashboard.css' %}"> -->
+<link rel="stylesheet" href="{% static 'css/doctor_dashboard.css' %}">
 
-<h1>Welcome {{doctor_obj.first_name}} {{doctor_obj.last_name}}</h1>
-<a href="{% url 'set_availability' doctor_obj.doctor_id  %}">Set Availabilty</a>
+<div class="container">
+    <!-- Welcome Message -->
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <h1 class="welcome-message">Welcome Dr. {{ doctor_obj.first_name | title }} {{ doctor_obj.last_name | title}}</h1>
+        </div>
+    </div>
+
+    <!-- Availability Section -->
+    <div class="row m">   
+        <div class="col-md-4 mb-4">
+            <div class="card equal-height card2">
+                <div class="card-body">
+                    <h5 class="card-title">Set your availability for the next week.</h5>
+                    <button type="button" class="btn btn-primary" data-toggle="modal"
+                        data-target="#setAvailabilityModal">
+                        Set Availability
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card equal-height card3">
+                <div class="card-body">
+                    <h5 class="card-title">View or edit Profile</h5>
+                    <a href="#" class="btn btn-primary">Edit Profile</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card equal-height card4">
+                <div class="card-body">
+                    <h5 class="card-title">View Appointment</h5>
+                    <p class="card-text">Check for any updates or alerts.</p>
+                    <a href="#" class="btn btn-primary">View Notifications</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+<!-- Set Availability Modal -->
+<div class="modal fade" id="setAvailabilityModal" tabindex="-1" role="dialog"
+    aria-labelledby="setAvailabilityModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="setAvailabilityModalLabel">Set Availability</h5>
+                <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> -->
+            </div>
+            <form method="POST" action="{% url 'set_availability' doctor_obj.id %}">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <p>Select your available dates for the next week:</p>
+                    <div class="form-group">
+                        {% for date in next_week_dates %}
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="availability_dates"
+                                value="{{ date|date:'M. d, Y' }}" id="date{{ forloop.counter }}">
+                            <label class="form-check-label" for="date{{ forloop.counter }}">
+                                {{ date|date:"M. d, Y" }}
+                            </label>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save Availability</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 {% endblock %}

@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<!-- <link rel="stylesheet" href="{% static 'css/doctor_dashboard.css' %}"> -->
+
+<div class="container">
+    <!-- Welcome Message -->
+    <div class="row justify-content-center mb-4">
+        <div class="col-md-8 text-center">
+            <h1 class="welcome-message">Welcome {{ patient_obj.first_name | title }} {{ patient_obj.last_name | title}}
+            </h1>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-3">
+    <div class="row">
+        <!-- Book Appointment Card -->
+        <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+            <div class="card equal-height card2">
+                <div class="card-body">
+                    <h5 class="card-title">Book Appointment</h5>
+                    <a href="{% url 'book_appointment' %}" class="btn btn-primary">Book Appointment</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Details Card -->
+        <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+            <div class="card equal-height card2">
+                <div class="card-body">
+                    <h5 class="card-title">Profile Details</h5>
+                    <button type="button" class="btn btn-primary">Profile Details</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- My Appointments Card -->
+        <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+            <div class="card equal-height card2">
+                <div class="card-body">
+                    <h5 class="card-title">My Appointments</h5>
+                    <button type="button" class="btn btn-primary">View Appointments</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Additional Card Example -->
+        <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+            <div class="card equal-height card2">
+                <div class="card-body">
+                    <h5 class="card-title">Additional Card</h5>
+                    <button type="button" class="btn btn-primary">Extra Card</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- More Cards if needed -->
+    </div>
+</div>
+
+
+{% endblock %}

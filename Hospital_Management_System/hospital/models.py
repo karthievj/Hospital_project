@@ -90,26 +90,27 @@ class Service(models.Model): # admin
     def __str__(self):
         return f"{self.name} - ${self.cost}"
 
-# class Appointment(models.Model):
-#     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
-#     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
-#     appointment_date = models.DateField()
-#     services = models.ManyToManyField(Service)  # Link to the Service model
-#     appt_id = models.CharField(max_length=10,unique=True,blank=True)
+class Appointment(models.Model):
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
+    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
+    appointment_date = models.DateField()
+    services = models.ManyToManyField(Service)  # Link to the Service model
+    appt_id = models.CharField(max_length=10,unique=True,blank=True)
+    appt_status = models.BooleanField(default=False)
 
-#     def save(self,*args,**kwargs):
-#         """Appoitment ID : APPT362523
-#         Eg - Date -  01/10/24
-#             Patient id - APPT011034
-#         """
-#         if not self.appt_id:
-#             appt_date = self.appointment_date.strftime('%d%m') # 0110
-#             random_id = ''.join(random.choices(string.digits,k=2)) 
-#             self.patient_id = f"APPT{appt_date}{random_id}"
-#         super().save(*args,**kwargs)
+    def save(self,*args,**kwargs):
+        """Appoitment ID : APPT362523
+        Eg - Date -  01/10/24
+            Appt id - APPT011034
+        """
+        if not self.appt_id:
+            appt_date = self.appointment_date.strftime('%d%m') # 0110
+            random_id = ''.join(random.choices(string.digits,k=2)) 
+            self.appt_id = f"APPT{appt_date}{random_id}"
+        super().save(*args,**kwargs)
 
-#     def __str__(self):
-#         return f"Appointment {self.appt_id} with Dr. {self.doctor.first_name} for {self.patient.first_name}"
+    def __str__(self):
+        return f"Appointment {self.appt_id} with Dr. {self.doctor.first_name} for {self.patient.first_name}"
 
 
 
