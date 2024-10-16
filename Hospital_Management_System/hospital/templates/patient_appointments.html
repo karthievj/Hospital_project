@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<h3 style="text-align:center; font-weight:bold; color:red;">
+    Appointments for Patient Name : {{patient}}
+</h3>
+<table class="table table-hover">
+    <thead class="thead-dark">
+        <th>Appointment_date</th>
+        <th>Appointment ID </th>
+        <th>Doctor Name </th>
+        <th>Services</th>
+        <th>Appointment Status</th>
+    </thead>
+    <tbody>
+        {% for appt in appt_obj %}
+            <tr>
+                <td>{{ appt.appointment_date }}</td>
+                <td>{{ appt.appt_id }}</td>
+                <td>{{ appt.doctor | title }}</td>
+                <td>
+                    {% for service in appt.services.all %}
+                        {{ service.name }}{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                </td>
+                <td>
+                    {% if appt.appt_status == "pending" %}
+                        <h5><span class="badge badge-warning">{{ appt.appt_status | title }}</span></h5>
+                    {% elif appt.appt_status == "completed" %}
+                        <h5><span class="badge badge-success">{{ appt.appt_status | title  }}</span></h5>
+                    {% else %}
+                        <h5><span class="badge badge-danger">{{ appt.appt_status | title }}</span></h5>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

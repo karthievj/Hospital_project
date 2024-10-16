@@ -125,4 +125,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_URL = '/admin_login/'
 
+SESSION_COOKIE_AGE = 300 #5 minutes
+
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
 

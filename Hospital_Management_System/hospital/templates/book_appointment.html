@@ -13,7 +13,8 @@
             <select class="form-select" id="doctorSelect" name="doctor_id" required onchange="this.form.submit()">
                 <option value="">-- Select Doctor --</option>
                 {% for doctor in approved_doctors %}
-                    <option value="{{ doctor.doctor_id }}" {% if selected_doctor and selected_doctor.doctor_id == doctor.doctor_id %}selected{% endif %}>
+                    <option value="{{ doctor.doctor_id }}" 
+                    {% if selected_doctor and selected_doctor.doctor_id == doctor.doctor_id %}selected{% endif %}>
                         {{ doctor.first_name }} {{ doctor.last_name }}
                     </option>
                 {% endfor %}
@@ -24,7 +25,9 @@
         {% if selected_doctor %}
         <div class="mb-3">
             <label for="appointmentDate" class="form-label">Select Appointment Date</label>
-            <select class="form-select" id="appointmentDate" name="appointment_date" required>
+            <select class="form-select" 
+            id="appointmentDate" 
+            name="appointment_date" required>
                 <option value="">-- Select Appointment Date --</option>
                 {% for date in available_dates %}
                     <option value="{{ date }}">{{ date }}</option>
@@ -55,6 +58,8 @@
         </div>
 
         <button type="submit" class="btn btn-primary">Submit</button>
+        <a href="{% url 'patient_dashboard' %}" class="btn btn-info">Go back to Dashboard</a>
+
     </form>
 </div>
 {% endblock %}

@@ -91,12 +91,18 @@ class Service(models.Model): # admin
         return f"{self.name} - ${self.cost}"
 
 class Appointment(models.Model):
+    appt_status_choices = [
+        ('pending','Pending'),
+        ('completed','Completed'),
+        ('rejected','Rejected')
+    ]
+
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
     appointment_date = models.DateField()
     services = models.ManyToManyField(Service)  # Link to the Service model
     appt_id = models.CharField(max_length=10,unique=True,blank=True)
-    appt_status = models.BooleanField(default=False)
+    appt_status = models.CharField(max_length=10,choices=appt_status_choices,default='pending')
 
     def save(self,*args,**kwargs):
         """Appoitment ID : APPT362523

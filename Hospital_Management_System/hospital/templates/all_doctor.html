@@ -21,28 +21,26 @@
         </div>
         <ul class="sidebar-menu">
             <li><a href="{% url 'dashboard' %}"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-            <li><a href="{% url 'dashboard' %}"><i class="fas fa-calendar-alt"></i> All Appoitment</a></li>
-            <li><a href="{% url 'all_doctor' %}"><i class="fas fa-user-md"></i> View Doctors</a></li>
-            <li><a href="#"><i class="fas users"></i> View patients </a></li>
+            <li><a href="{% url 'all_doctor' %}"><i class="fas fa-user-md"></i>All doctors</a></li>
+            <li><a href="#"><i class="fas fa-file-alt"></i> Reports</a></li>
             <li><a href="#"><i class="fas fa-cogs"></i> Settings</a></li>
             <li><a href="{% url 'logout_view' %}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
         </ul>
     </nav>
-
+    
     <!-- Main Content -->
     <div class="main-content">
         <header>
-            <h1>Welcome Admin </h1>
-            <p>Manage your Doctor, Patients here.</p>
+            <p>All doctors</p>
         </header>
 
         <section class="dashboard-section">
             <div class="card1">
                 <div class="card-header">
-                    <h1>Unapproved Doctors Data </h1>
+                    <!-- <h1>Unapproved Doctors Data </h1> -->
                 </div>
                 <div class="card-body">
-                    {% if unapproved_doctors %}
+                    <!-- {% if unapproved_doctors %}
                     <h1>Unapproved doctors count - {{unapproved_doctors_count}}</h1>
                     <div class="table-responsive">
                         <table class="table table-hover">
@@ -78,7 +76,7 @@
                     <div>
                         <h1>No doctors need to approval</h1>
                     </div>
-                    {%endif%}
+                    {%endif%} -->
                 </div>
             </div>
 

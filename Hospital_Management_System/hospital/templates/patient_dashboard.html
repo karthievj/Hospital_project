@@ -29,8 +29,8 @@
         <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
             <div class="card equal-height card2">
                 <div class="card-body">
-                    <h5 class="card-title">Profile Details</h5>
-                    <button type="button" class="btn btn-primary">Profile Details</button>
+                    <h5 class="card-title">My appointments</h5>
+                    <a href="{% url 'patient_appointments' %}" class="btn btn-primary">My appointments</a>
                 </div>
             </div>
         </div>
@@ -39,8 +39,8 @@
         <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
             <div class="card equal-height card2">
                 <div class="card-body">
-                    <h5 class="card-title">My Appointments</h5>
-                    <button type="button" class="btn btn-primary">View Appointments</button>
+                    <h5 class="card-title">Profile Details</h5>
+                    <button type="button" class="btn btn-primary">Profile Details</button>
                 </div>
             </div>
         </div>
@@ -58,6 +58,7 @@
         <!-- More Cards if needed -->
     </div>
 </div>
+
 
 
 {% endblock %}

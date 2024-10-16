@@ -29,6 +29,14 @@ def dashboard(request):
         messages.error(request, "You're not a admin user")
         return redirect('admin_login')
 
+@login_required
+def all_doctor(request):
+    if request.user.is_superuser:
+        return render(request,"all_doctor.html")
+    else:
+        messages.error(request, "You're not a admin user")
+        return redirect('admin_login')
+
 def admin_login(request):
     if request.method == "POST":
         uname = request.POST['uname']
@@ -37,6 +45,7 @@ def admin_login(request):
         
         if user is not None and user.is_superuser:
             login(request, user)
+            request.session['is_logged_in'] = True 
             return redirect('dashboard')  # Redirect to the admin dashboard
         else:
             messages.error(request, "Invalid credentials or not an admin.")
@@ -138,6 +147,7 @@ def doctor_login(request):
                     # Store doctor details in session
                     request.session['doctor_id'] = doctor_obj.doctor_id
                     request.session['doctor_name'] = doctor_obj.first_name 
+                    request.session['is_logged_in'] = True 
 
                     messages.success(request,"Logged in successfully...")
                     return redirect("doctor_dashboard")
@@ -228,6 +238,7 @@ def patient_login(request):
             # Store patient details in session
             request.session['patient_id'] = patient_obj.patient_id
             request.session['patient_name'] = patient_obj.first_name
+            request.session['is_logged_in'] = True 
             data ={
                 'patient_obj':patient_obj
             } 
@@ -256,6 +267,21 @@ def patient_dashboard(request):
         messages.warning(request,'Patient is not logged in.....')
         return redirect("patient_login")
 
+def patient_appointments(request):
+    if request.user.is_authenticated:
+        patient = request.user.patient
+        appt_obj = Appointment.objects.filter(patient=patient).order_by('appointment_date') # Ascending
+            
+        context = {
+            'appt_obj':appt_obj,
+            'patient':patient
+        }
+
+        return render(request,"patient_appointments.html",context)
+    else:
+       messages.warning(request, "Session expired...Please login")
+       return redirect('patient_login')
+
 def logout_view(request):
     logout(request)
     messages.success(request, "You have been logged out successfully.")
@@ -264,72 +290,85 @@ def logout_view(request):
 ######################### Book Appointment #################################################
 
 def book_appointment(request):
-    doctors_with_availability = Doctor.objects.annotate(
-            has_availability=Exists(
-                DoctorAvailability.objects.filter(
-                    doctor=OuterRef('pk'),
-                    available_date__gte=date.today()
-                )
-            )
-        ).filter(has_availability=True, approval=True)  # Only approved doctors    selected_doctor = None
-    
-    available_dates = []
-    selected_doctor = None
-    services = Service.objects.all()
-
-    if request.method == 'POST':
-        patient_id = request.session.get('patient_id')
-        patient_obj = Patient.objects.get(patient_id=patient_id)
-        doctor_id = request.POST.get('doctor_id')
-        appointment_date_str = request.POST.get('appointment_date', "")
-        selected_services = request.POST.getlist('services')  # Get the selected services
-       
-        # Check if doctor_id is different from previously selected doctor
-        previous_doctor_id = request.session.get('previous_doctor_id')
-        if doctor_id and doctor_id != previous_doctor_id: 
-            appointment_date_str = ""
-            request.session['previous_doctor_id'] = doctor_id
-
-        if doctor_id:
-            selected_doctor = Doctor.objects.get(doctor_id=doctor_id)
-            available_dates = DoctorAvailability.objects.filter(
-                doctor=selected_doctor, 
-                available_date__gte=date.today()
-            ).values_list('available_date', flat=True)
-
-            # Save appointment when the date is selected
-            if appointment_date_str:
-                try:
-                    appointment_date = datetime.strptime(appointment_date_str, "%b. %d, %Y")
-                    # Create a new appointment
-                    appointment = Appointment(
-                        patient=patient_obj,  # Assuming you have a Patient model linked to User
-                        doctor=selected_doctor,
-                        appointment_date=appointment_date
-        
+    if request.user.is_authenticated:
+        doctors_with_availability = Doctor.objects.annotate(
+                has_availability=Exists(
+                    DoctorAvailability.objects.filter(
+                        doctor=OuterRef('pk'),
+                        available_date__gte=date.today()
                     )
-                    appointment.save()
+                )
+            ).filter(has_availability=True, approval=True)  # Only approved doctors    selected_doctor = None
+        
+        available_dates = []
+        selected_doctor = None
+        services = Service.objects.all()
 
-                    # Add selected services to the appointment
-                    for service_id in selected_services:
-                        service = Service.objects.get(id=service_id)
-                        appointment.services.add(service)
-                    messages.success(request,"Appointment created successfully...")
-                    return redirect('patient_dashboard')
-                except ValueError:
-                    messages.error(request, "Invalid date format selected.")
-                    return redirect('patient_dashboard')
-        else:
-            messages.warning(request,"No doctor")
+        if request.method == 'POST':
+            patient_id = request.session.get('patient_id')
+            patient_obj = Patient.objects.get(patient_id=patient_id)
+            current_doctor_id = request.POST.get('doctor_id') #
+            appointment_date_str = request.POST.get('appointment_date', "")
+            selected_services = request.POST.getlist('services')  # Get the selected services
+        
+            # Check if doctor_id is different from previously selected doctor
+            previous_doctor_id = request.session.get('previous_doctor_id') # ""
+            if current_doctor_id and current_doctor_id != previous_doctor_id: 
+                appointment_date_str = ""
+                request.session['previous_doctor_id'] = current_doctor_id
 
-    context = {
-        'approved_doctors': doctors_with_availability, # approved_doctors_availability
-        'selected_doctor': selected_doctor,
-        'available_dates': available_dates,
-        'services': services,
-    }
-    return render(request, 'book_appointment.html', context)
+            if current_doctor_id:
+                selected_doctor = Doctor.objects.get(doctor_id=current_doctor_id)
+                available_dates = DoctorAvailability.objects.filter(
+                    doctor=selected_doctor, 
+                    available_date__gte=date.today()
+                ).values_list('available_date', flat=True)
 
+                # Save appointment when the date is selected
+                if appointment_date_str:
+                    try:
+                        appointment_date = datetime.strptime(appointment_date_str, "%b. %d, %Y")
+
+                        # Check for existing appointments
+                        existing_appointment = Appointment.objects.filter(patient=patient_obj, 
+                                                    doctor=selected_doctor, 
+                                                    appointment_date=appointment_date).exists()
+                        if existing_appointment:
+                            messages.warning(request, "You already have an appointment with this doctor on this date.")
+                            return redirect('book_appointment')
+                        
+                        # Create a new appointment
+                        appointment = Appointment(
+                            patient=patient_obj,  # Assuming you have a Patient model linked to User
+                            doctor=selected_doctor,
+                            appointment_date=appointment_date
+            
+                        )
+                        appointment.save()
+
+                        # Add selected services to the appointment
+                        for service_id in selected_services:
+                            service = Service.objects.get(id=service_id)
+                            appointment.services.add(service)
+                        messages.success(request,"Appointment created successfully...")
+                        return redirect('patient_dashboard')
+                    except ValueError:
+                        messages.error(request, "Invalid date format selected.")
+                        return redirect('patient_dashboard')
+            else:
+                messages.warning(request,"No doctor")
+
+        context = {
+            'approved_doctors': doctors_with_availability, # approved_doctors_availability
+            'selected_doctor': selected_doctor,
+            'available_dates': available_dates,
+            'services': services,
+        }
+        return render(request, 'book_appointment.html', context)
+    else:
+        # If the user is not authenticated, redirect to the login page or show a message
+        messages.warning(request, "Session expired...Please login")
+        return redirect('patient_login')  
 
 
 
