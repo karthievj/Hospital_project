@@ -1,0 +1,19 @@
+.home-image{
+    display: block;
+    margin: 0 auto;
+    max-width: 30%;
+    height: auto;
+    padding-top: 50px;
+    transition: transform 0.2s ease;
+
+}
+
+.home-image:hover{
+    transform: scale(1.05);
+}
+
+h2{
+    text-shadow: 1cap;
+    text-align: center;
+    color: rgb(3, 3, 31);
+}

@@ -189,6 +189,23 @@ def doctor_dashboard(request):
         # If no doctor in session, redirect to login
         return redirect("doctor_login")
 
+def doctor_appointments(request):
+    if request.user.is_authenticated:
+        doctor = request.user.doctor
+        doct_appt_obj = Appointment.objects.filter(doctor=doctor).order_by('appointment_date') # Ascending
+        
+        context = {
+            'doct_appt_obj':doct_appt_obj,
+            'doctor':doctor
+        }
+        return render(request,"doctor_appointments.html",context)
+    else:
+        messages.error(request,"Session expired...")
+        return redirect("doctor_login")
+
+
+
+
 ############################### Patient Views ###############################
 def register_patient(request):
     if request.method == 'POST':
@@ -369,6 +386,32 @@ def book_appointment(request):
         # If the user is not authenticated, redirect to the login page or show a message
         messages.warning(request, "Session expired...Please login")
         return redirect('patient_login')  
+
+def appt_approve(request,appt_id):
+    if request.user.is_authenticated:
+        appt = Appointment.objects.get(appt_id=appt_id)
+        appt.appt_status = "completed"
+        appt.save()
+        messages.success(request, "Appointment status updated successfully")
+        return redirect('doctor_appointments')  
+    else:
+        messages.warning(request, "Session expired...Please login")
+        return redirect('patient_login')
+    
+def appt_reject(request,appt_id):
+    if request.user.is_authenticated:
+        appt = Appointment.objects.get(appt_id=appt_id)
+        appt.appt_status = "rejected"
+        appt.save()
+        messages.success(request, "Appointment status updated successfully")
+        return redirect('doctor_appointments')  
+    else:
+        messages.warning(request, "Session expired...Please login")
+        return redirect('patient_login')
+
+
+
+
 
 
 

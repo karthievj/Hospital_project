@@ -20,6 +20,9 @@ urlpatterns = [
     path('doctor_reject/<str:id>/',views.doctor_reject,name="doctor_reject"),
     path('set_availability/<str:id>/',views.set_availability,name="set_availability"),
     path('doctor_dashboard/',views.doctor_dashboard,name="doctor_dashboard"),
+    path('doctor_appointments/',views.doctor_appointments,name="doctor_appointments"),
+    path('appt_approve/<str:appt_id>/',views.appt_approve,name="appt_approve"),
+    path('appt_reject/<str:appt_id>/',views.appt_reject,name="appt_reject"),
 
     #patient urls
     path('register_patient/',views.register_patient,name="register_patient"),
@@ -29,6 +32,5 @@ urlpatterns = [
 
     #Book Appointment
     path('book_appointment/',views.book_appointment,name="book_appointment"),
-
 
 ]
